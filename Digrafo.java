@@ -35,8 +35,8 @@ public class Digrafo implements Grafo
 * @throws boolean: true en caso de cargar exitosamente el grafo, false en caso contrario.
 */
     public boolean cargarGrafo(String dirArchivo) {
-        String id,extI,extF;
-        int n;
+        String id;
+        int n,m;
         Double peso;
 
         try{
@@ -49,30 +49,29 @@ public class Digrafo implements Grafo
             linea = buffer.readLine();
             m = Integer.parseInt(linea);
 
-            mat = int[n][m];
+            mat = new int[n][m];
 
             for(int i=0; i < n; i++){
                 linea = buffer.readLine();
                 datos = linea.split(" ");
-                for (int j=0, j < m, j++){
+                for(int j=0; j < m; j++){
                     mat[i][j] = Integer.parseInt(datos[j]);
                     id = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    altura = mat[i][j];
+                    int altura = mat[i][j];
                     Vertice v = new Vertice(id, altura);
                     vertices.add(v);
                 }
             }
 
             buffer.close();
-            return true;
         }catch(IOException e){
             System.out.println("Hubo un error");
             return false;
         }
 
         // Crear el grafo
-        i = 0;
-        j = 0;
+        int i = 0;
+        int j = 0;
 
         String id1;
         String id2;
@@ -80,216 +79,178 @@ public class Digrafo implements Grafo
 
         while(i < n){
 
-            if (i=0){ // primera fila
-                if(j = 0){ // primera columna
+            if (i == 0){ // primera fila
+                if(j == 0){ // primera columna
                     if(mat[i][j+1] <= mat[i][j]){ // derecha
                         id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                         id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
                         id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
+                        agregarArco(id3,0,id1,id2);
                     }
 
                     if(mat[i+1][j] <= mat[i][j]){ // abajo
                         id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                         id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
                         id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
+                        agregarArco(id3,0,id1,id2);
                     }
                     j++;
                     continue;
                 }
 
-                if(j = m-1){ // ultima columna
+                if(j == m-1){ // ultima columna
                     if(mat[i][j-1] <= mat[i][j]){ // izquierda
                         id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                         id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
                         id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
+                        agregarArco(id3,0,id1,id2);
                     }
 
                     if(mat[i+1][j] <= mat[i][j]){ // abajo
                         id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                         id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
                         id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
+                        agregarArco(id3,0,id1,id2);
                     }
                     j=0;
                     i++;
                     continue;
                 }
 
-                // 0 < j < m-1
+                // i = 0; 0 < j < m-1
                 if(mat[i][j-1] <= mat[i][j]){ // izquierda
                     id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                     id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
                     id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
+                    agregarArco(id3,0,id1,id2);
                 }
 
                 if(mat[i+1][j] <= mat[i][j]){ // abajo
                     id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                     id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
                     id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
+                    agregarArco(id3,0,id1,id2);
                 }
 
                 if(mat[i][j+1] <= mat[i][j]){ // derecha
                     id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                     id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
                     id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-                j++;
-            }
-
-            if (i=n-1){ // ultima fila
-                if(j = 0){ // primera columna
-                    if(mat[i][j+1] <= mat[i][j]){ // derecha
-                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                        id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
-                        id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
-                    }
-
-                    if(mat[i-1][j] <= mat[i][j]){ // arriba
-                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                        id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
-                        id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
-                    }
-                    j++;
-                    continue;
-                }
-
-                if(j = m-1){ // ultima columna
-                    if(mat[i][j-1] <= mat[i][j]){ // izquierda
-                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                        id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
-                        id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
-                    }
-
-                    if(mat[i-1][j] <= mat[i][j]){ // arriba
-                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                        id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
-                        id3 = "[" + id1 + id2 + "]";
-                        Vertice v = obtenerVertice(id1);
-                        Vertice w = obtenerVertice(id2);
-                        agregarArco(id3,0,v,w);
-                    }
-                    j=0;
-                    i++;
-                    continue;
-                }
-
-                // 0 < j < m-1
-                if(mat[i][j-1] <= mat[i][j]){ // izquierda
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-
-                if(mat[i-1][j] <= mat[i][j]){ // arriba
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-
-                if(mat[i][j+1] <= mat[i][j]){ // derecha
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-                j++;
-            }
-
-            // en el medio
-            if(j = 0){ // primera columna
-                if(mat[i][j+1] <= mat[i][j]){ // derecha
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-
-                if(mat[i+1][j] <= mat[i][j]){ // abajo
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-
-                if(mat[i-1][j] <= mat[i][j]){ // arriba
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
+                    agregarArco(id3,0,id1,id2);
                 }
                 j++;
                 continue;
             }
 
-            if(j = m-1){ // ultima columna
+            if (i == n-1){ // ultima fila
+                if(j == 0){ // primera columna
+                    if(mat[i][j+1] <= mat[i][j]){ // derecha
+                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                        id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
+                        id3 = "[" + id1 + id2 + "]";
+                        agregarArco(id3,0,id1,id2);
+                    }
+
+                    if(mat[i-1][j] <= mat[i][j]){ // arriba
+                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                        id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
+                        id3 = "[" + id1 + id2 + "]";
+                        agregarArco(id3,0,id1,id2);
+                    }
+                    j++;
+                    continue;
+                }
+
+                if(j == m-1){ // ultima columna
+                    if(mat[i][j-1] <= mat[i][j]){ // izquierda
+                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                        id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
+                        id3 = "[" + id1 + id2 + "]";
+                        agregarArco(id3,0,id1,id2);
+                    }
+
+                    if(mat[i-1][j] <= mat[i][j]){ // arriba
+                        id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                        id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
+                        id3 = "[" + id1 + id2 + "]";
+                        agregarArco(id3,0,id1,id2);
+                    }
+                    j=0;
+                    i++;
+                    continue;
+                }
+
+                // i = n-1; 0 < j < m-1
                 if(mat[i][j-1] <= mat[i][j]){ // izquierda
                     id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                     id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
                     id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
-                }
-
-                if(mat[i+1][j] <= mat[i][j]){ // abajo
-                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
-                    id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
-                    id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
+                    agregarArco(id3,0,id1,id2);
                 }
 
                 if(mat[i-1][j] <= mat[i][j]){ // arriba
                     id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                     id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
                     id3 = "[" + id1 + id2 + "]";
-                    Vertice v = obtenerVertice(id1);
-                    Vertice w = obtenerVertice(id2);
-                    agregarArco(id3,0,v,w);
+                    agregarArco(id3,0,id1,id2);
+                }
+
+                if(mat[i][j+1] <= mat[i][j]){ // derecha
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+                j++;
+                continue;
+            }
+
+            // en el medio
+            if(j == 0){ // primera columna
+                if(mat[i][j+1] <= mat[i][j]){ // derecha
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+
+                if(mat[i+1][j] <= mat[i][j]){ // abajo
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+
+                if(mat[i-1][j] <= mat[i][j]){ // arriba
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+                j++;
+                continue;
+            }
+
+            if(j == m-1){ // ultima columna
+                if(mat[i][j-1] <= mat[i][j]){ // izquierda
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+
+                if(mat[i+1][j] <= mat[i][j]){ // abajo
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
+                }
+
+                if(mat[i-1][j] <= mat[i][j]){ // arriba
+                    id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
+                    id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
+                    id3 = "[" + id1 + id2 + "]";
+                    agregarArco(id3,0,id1,id2);
                 }
                 j=0;
                 i++;
@@ -301,39 +262,30 @@ public class Digrafo implements Grafo
                 id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                 id2 = "(" + String.valueOf(i) + "," + String.valueOf(j-1) + ")";
                 id3 = "[" + id1 + id2 + "]";
-                Vertice v = obtenerVertice(id1);
-                Vertice w = obtenerVertice(id2);
-                agregarArco(id3,0,v,w);
+                agregarArco(id3,0,id1,id2);
             }
-
             if(mat[i+1][j] <= mat[i][j]){ // abajo
                 id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                 id2 = "(" + String.valueOf(i+1) + "," + String.valueOf(j) + ")";
                 id3 = "[" + id1 + id2 + "]";
-                Vertice v = obtenerVertice(id1);
-                Vertice w = obtenerVertice(id2);
-                agregarArco(id3,0,v,w);
+                agregarArco(id3,0,id1,id2);
             }
 
             if(mat[i][j+1] <= mat[i][j]){ // derecha
                 id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                 id2 = "(" + String.valueOf(i) + "," + String.valueOf(j+1) + ")";
                 id3 = "[" + id1 + id2 + "]";
-                Vertice v = obtenerVertice(id1);
-                Vertice w = obtenerVertice(id2);
-                agregarArco(id3,0,v,w);
+                agregarArco(id3,0,id1,id2);
             }
-
             if(mat[i-1][j] <= mat[i][j]){ // arriba
                 id1 = "(" + String.valueOf(i) + "," + String.valueOf(j) + ")";
                 id2 = "(" + String.valueOf(i-1) + "," + String.valueOf(j) + ")";
                 id3 = "[" + id1 + id2 + "]";
-                Vertice v = obtenerVertice(id1);
-                Vertice w = obtenerVertice(id2);
-                agregarArco(id3,0,v,w);
+                agregarArco(id3,0,id1,id2);
             }
             j++;
-        }
+            continue;
+        }return true;
     }
 
 /**
@@ -396,7 +348,7 @@ public class Digrafo implements Grafo
 * Parametros de salida:
 * @throws boolean: true, en caso de agregar el vertice de manera exitosa; false, en caso contrario
 */
-    public boolean agregarVertice(String id, double peso) {
+    public boolean agregarVertice(String id, int peso) {
 
         if(this.estaVertice(id)){
             return false;
@@ -711,7 +663,7 @@ public class Digrafo implements Grafo
 * Parametros de salida:
 * @throws boolean: true, en caso de que el arco se agregue de manera exitosa al grafo; false, en caso contrario
 */
-    public boolean agregarArco(String id, double peso, String eInicial, String eFinal){
+    public boolean agregarArco(String id, int peso, String eInicial, String eFinal){
         
         if(arcos.size() == 0){
             //Verificamos si los extremos de el arco estan en la lista de vertices

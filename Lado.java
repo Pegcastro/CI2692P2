@@ -44,7 +44,7 @@ public abstract class Lado
  * Parametros de salida:
  * @throws id: tipo String, identificador del lado
 */
-  public double getAltura() {
+  public int getPeso() {
   	return altura;
   }
 

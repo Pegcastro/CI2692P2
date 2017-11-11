@@ -21,7 +21,7 @@ public class Arco extends Lado
  * Parametros de salida:
  * @throws arco: objeto Arco
 */ 
-  public Arco(String id, double peso, Vertice extremoInicial, Vertice extremoFinal) {
+  public Arco(String id, int peso, Vertice extremoInicial, Vertice extremoFinal) {
     super(id, peso);
     id = id;
     peso = peso;
@@ -64,7 +64,7 @@ public class Arco extends Lado
  */
   public String toString() {
   	String space = " ";
-    String pesoStr = Double.toString(this.getPeso());
+    String pesoStr = Integer.toString(this.getPeso());
     return this.getId() + space + extremoInicial.getId() + space + extremoFinal.getId() + space + pesoStr;
   }
   
